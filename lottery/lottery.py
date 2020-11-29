@@ -16,8 +16,8 @@ class Lottery:
         """
         if reward_scheme is None:
             reward_scheme = [0, 0, 3.5, 200, 80000]
-        self._max = num_balls
-        self._numbers = np.arange(0, self._max)
+        self._num_balls = num_balls
+        self._numbers = np.arange(1, self._num_balls + 1)
         self._draws = num_balls_drawn
         self.bankroll = bankroll
         self.reward_scheme = reward_scheme
@@ -48,7 +48,7 @@ class Lottery:
         self.sim_results_ = res.astype(np.int64)
         return self.sim_results_
 
-    def payout(self, numbers_matched=None):
+    def payout(self, numbers_matched=None, print_out_winners=False):
         """
         array of integers indicating how many numbers matched.
         If None, default to output of check()
@@ -59,6 +59,9 @@ class Lottery:
             numbers_matched = self.sim_results_
 
         for i in numbers_matched:
+            if print_out_winners:
+                if i >= 3:
+                    print(f"Matched {i} numbers, you win {self.reward_scheme[i]} pounds.")
             self.bankroll += self.reward_scheme[i]
         return self.bankroll
 
@@ -132,7 +135,6 @@ class Bankroll:
 
     def __iadd__(self, other):
         self._amount += other
-        # print("self._amount += other: ", self._amount, other )
         return self
 
     def __eq__(self, other):
@@ -191,6 +193,7 @@ class Bankroll:
 
 
 class Simulations:
+    """deprecated simulations"""
 
     @staticmethod
     def sim1():
